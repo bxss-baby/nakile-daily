@@ -1,75 +1,360 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0756c9">
 <title>NAKILE DAILY</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f2f5fa;color:#172b4d}
-header{background:#0756c9;color:white;padding:25px 18px;border-radius:0 0 22px 22px}
-header h1{margin:0;font-size:27px}
+body{margin:0;background:#f1f5fa;color:#172b4d;font-family:Arial,sans-serif;padding-bottom:75px}
+header{background:#0756c9;color:white;padding:23px 18px;border-radius:0 0 22px 22px}
+header h1{margin:0;font-size:26px}
 header p{margin-bottom:0}
-main{padding:18px}
-.search{width:100%;padding:14px;border:0;border-radius:12px;margin:12px 0 20px;font-size:15px}
+main{padding:16px;max-width:650px;margin:auto}
+.panel{background:white;padding:16px;border-radius:15px;margin-bottom:15px;box-shadow:0 2px 10px #0000000c}
 h2{font-size:19px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.card{background:white;padding:20px 10px;border-radius:15px;text-align:center;box-shadow:0 3px 12px #0000000c}
-.card span{font-size:29px}
-.card h3{font-size:15px;margin:9px 0 5px}
-.card p{font-size:12px;color:#68758a;margin:0}
-.notice{background:#e3efff;padding:16px;border-radius:14px;margin-top:20px}
-#result{background:white;padding:15px;border-radius:12px;margin-top:12px}
-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:13px 4px;box-shadow:0 -2px 12px #0001}
-nav button{border:0;background:none;color:#0756c9;font-size:12px}
-footer{text-align:center;padding:65px 10px 80px;color:#68758a;font-size:12px}
-button{cursor:pointer}
+h3{font-size:16px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #dce3ee;border-radius:9px;margin:6px 0 12px;font-size:15px;background:white}
+button{border:0;border-radius:9px;padding:12px;background:#0756c9;color:white;font-weight:bold;cursor:pointer}
+button.secondary{background:#e6efff;color:#0756c9}
+button.danger{background:#ffe8e8;color:#b42318}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.tile{background:white;padding:17px 10px;border-radius:13px;text-align:center;box-shadow:0 2px 8px #0001;cursor:pointer}
+.tile span{font-size:27px}
+.tile p{margin:7px 0 0;font-weight:bold;font-size:14px}
+.section{display:none}
+.section.active{display:block}
+.result{padding:12px;background:#e9f2ff;border-radius:10px;margin-top:10px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:9px 2px;box-shadow:0 -2px 12px #0002;z-index:5}
+nav button{background:white;color:#0756c9;padding:7px 5px;font-size:11px}
+nav button.active{background:#e9f2ff}
+small{color:#718096}
+.item{padding:10px 0;border-bottom:1px solid #eee}
+.big{font-size:25px;font-weight:bold;color:#0756c9}
+footer{text-align:center;color:#718096;padding:20px;font-size:12px}
 </style>
 </head>
 <body>
+
 <header>
 <h1>🌍 NAKILE DAILY</h1>
 <p>Une application. Plusieurs solutions. Chaque jour.</p>
 </header>
+
 <main>
-<input class="search" id="search" placeholder="🔎 Rechercher un service..." oninput="searchServices()">
-<h2>Bienvenue sur NAKILE DAILY 👋</h2>
+
+<div id="home" class="section active">
+<div class="panel">
+<h2>Bienvenue 👋</h2>
 <p>Que souhaites-tu faire aujourd'hui ?</p>
-<div class="grid" id="services">
-<div class="card" onclick="openService('Finance','Suis tes dépenses et ton épargne.')"><span>💰</span><h3>Finance</h3><p>Gérer mon argent</p></div>
-<div class="card" onclick="openService('Études','Organise tes cours et tes révisions.')"><span>📚</span><h3>Études</h3><p>Apprendre chaque jour</p></div>
-<div class="card" onclick="openService('Calculatrice','Effectue tes calculs rapidement.')"><span>🧮</span><h3>Calculatrice</h3><p>Faire un calcul</p></div>
-<div class="card" onclick="openService('Actualités','Retrouve bientôt les informations du jour.')"><span>🌍</span><h3>Actualités</h3><p>Rester informé</p></div>
-<div class="card" onclick="openService('Services','Découvre les services et petites annonces.')"><span>🤝</span><h3>Services</h3><p>Trouver un service</p></div>
-<div class="card" onclick="openService('Mon profil','Tes préférences et ton espace personnel.')"><span>👤</span><h3>Mon profil</h3><p>Mon espace</p></div>
+<input id="search" placeholder="🔎 Rechercher un service..." oninput="searchTiles()">
 </div>
-<div id="result" style="display:none"></div>
-<div class="notice">
-<strong>💡 Conseil du jour</strong>
-<p>Chaque petit pas compte. Organise ta journée et avance vers tes objectifs !</p>
+<div class="grid" id="tiles">
+<div class="tile" onclick="show('finance')"><span>💰</span><p>Finance</p></div>
+<div class="tile" onclick="show('calculator')"><span>🧮</span><p>Calculatrice</p></div>
+<div class="tile" onclick="show('convert')"><span>💱</span><p>Convertisseur</p></div>
+<div class="tile" onclick="show('school')"><span>📚</span><p>Études</p></div>
+<div class="tile" onclick="show('timetable')"><span>📅</span><p>Emploi du temps</p></div>
+<div class="tile" onclick="show('services')"><span>🤝</span><p>Services</p></div>
+<div class="tile" onclick="show('profile')"><span>👤</span><p>Mon profil</p></div>
+<div class="tile" onclick="show('news')"><span>🌍</span><p>Actualités</p></div>
 </div>
+<div class="panel" style="margin-top:16px">
+<h3>💡 Conseil du jour</h3>
+<p>Organise tes dépenses, développe tes compétences et avance chaque jour vers tes objectifs.</p>
+</div>
+</div>
+
+<div id="finance" class="section">
+<div class="panel">
+<h2>💰 Gestion financière</h2>
+<p>Mon solde calculé</p>
+<div class="big" id="balance">0 FCFA</div>
+<p>Revenus : <b id="income">0</b> FCFA</p>
+<p>Dépenses : <b id="expense">0</b> FCFA</p>
+</div>
+<div class="panel">
+<h3>Ajouter une opération</h3>
+<select id="kind"><option value="income">Revenu</option><option value="expense">Dépense</option></select>
+<input id="amount" type="number" placeholder="Montant en FCFA">
+<input id="reason" placeholder="Motif de l'opération">
+<button onclick="addTransaction()">Enregistrer</button>
+</div>
+<div class="panel">
+<h3>Historique</h3>
+<div id="history">Aucune opération.</div>
+</div>
+<div class="panel">
+<h3>🎯 Objectif d'épargne</h3>
+<input id="goal" type="number" placeholder="Mon objectif en FCFA">
+<input id="saved" type="number" placeholder="Somme déjà épargnée">
+<button onclick="saveGoal()">Enregistrer l'objectif</button>
+<div id="goalResult" class="result">Aucun objectif enregistré.</div>
+</div>
+</div>
+
+<div id="calculator" class="section">
+<div class="panel">
+<h2>🧮 Calculatrice</h2>
+<input id="calc" type="text" placeholder="Exemple : 2500+1500" inputmode="decimal">
+<div class="grid">
+<button onclick="addCalc('7')">7</button>
+<button onclick="addCalc('8')">8</button>
+<button onclick="addCalc('9')">9</button>
+<button onclick="addCalc('+')">+</button>
+<button onclick="addCalc('4')">4</button>
+<button onclick="addCalc('5')">5</button>
+<button onclick="addCalc('6')">6</button>
+<button onclick="addCalc('-')">−</button>
+<button onclick="addCalc('1')">1</button>
+<button onclick="addCalc('2')">2</button>
+<button onclick="addCalc('3')">3</button>
+<button onclick="addCalc('*')">×</button>
+<button onclick="addCalc('0')">0</button>
+<button onclick="addCalc('.')">.</button>
+<button onclick="calculate()">=</button>
+<button onclick="addCalc('/')">÷</button>
+</div>
+<br><br>
+<button class="danger" onclick="document.getElementById('calc').value=''">Effacer</button>
+<div id="calcResult" class="result">Résultat : </div>
+</div>
+</div>
+
+<div id="convert" class="section">
+<div class="panel">
+<h2>💱 Convertisseur de monnaies</h2>
+<input id="convertAmount" type="number" placeholder="Montant à convertir">
+<select id="from">
+<option value="XOF">FCFA (XOF)</option>
+<option value="EUR">Euro (EUR)</option>
+<option value="USD">Dollar (USD)</option>
+</select>
+<select id="to">
+<option value="EUR">Euro (EUR)</option>
+<option value="XOF">FCFA (XOF)</option>
+<option value="USD">Dollar (USD)</option>
+</select>
+<button onclick="convertMoney()">Convertir</button>
+<div id="convertResult" class="result">Le résultat apparaîtra ici.</div>
+<small>Taux indicatifs modifiables dans le code. Vérifie le taux réel avant une transaction.</small>
+</div>
+</div>
+
+<div id="school" class="section">
+<div class="panel">
+<h2>📚 Espace étudiant</h2>
+<h3>Calculer ma moyenne</h3>
+<input id="subject" placeholder="Nom de la matière">
+<input id="grade" type="number" min="0" max="20" step="0.25" placeholder="Note sur 20">
+<input id="coefficient" type="number" min="1" value="1" placeholder="Coefficient">
+<button onclick="addGrade()">Ajouter la note</button>
+<div id="gradesList"></div>
+<div class="result">Moyenne générale : <b id="average">0/20</b></div>
+</div>
+<div class="panel">
+<h3>📝 Mes notes personnelles</h3>
+<textarea id="studentNote" rows="4" placeholder="Écris tes rappels ou tes leçons..."></textarea>
+<button onclick="saveNote()">Enregistrer mes notes</button>
+</div>
+</div>
+
+<div id="timetable" class="section">
+<div class="panel">
+<h2>📅 Mon emploi du temps</h2>
+<select id="day">
+<option>Lundi</option><option>Mardi</option><option>Mercredi</option>
+<option>Jeudi</option><option>Vendredi</option><option>Samedi</option><option>Dimanche</option>
+</select>
+<input id="hour" placeholder="Heure (ex : 07h30)">
+<input id="lesson" placeholder="Cours ou activité">
+<button onclick="addSchedule()">Ajouter</button>
+<div id="scheduleList"></div>
+</div>
+</div>
+
+<div id="services" class="section">
+<div class="panel">
+<h2>🤝 Services et opportunités</h2>
+<p>Un espace pour trouver des services et publier des annonces.</p>
+<input id="adTitle" placeholder="Titre de ton annonce">
+<textarea id="adDescription" placeholder="Décris ton service"></textarea>
+<button onclick="addAd()">Publier sur cet appareil</button>
+<div id="adsList"></div>
+<small>Les annonces sont actuellement visibles uniquement sur cet appareil. La publication publique nécessitera un serveur.</small>
+</div>
+</div>
+
+<div id="news" class="section">
+<div class="panel">
+<h2>🌍 Actualités</h2>
+<p>Cette rubrique accueillera les actualités du Burkina Faso et des autres pays africains.</p>
+<p>La connexion à un fournisseur d'informations sera ajoutée dans une prochaine version.</p>
+</div>
+</div>
+
+<div id="profile" class="section">
+<div class="panel">
+<h2>👤 Mon profil</h2>
+<input id="username" placeholder="Mon prénom ou pseudonyme">
+<select id="country">
+<option>Burkina Faso</option><option>Côte d'Ivoire</option>
+<option>Mali</option><option>Sénégal</option>
+<option>Bénin</option><option>Togo</option>
+<option>Niger</option><option>Ghana</option>
+<option>Cameroun</option><option>Autre</option>
+</select>
+<button onclick="saveProfile()">Enregistrer mon profil</button>
+<div id="profileResult" class="result"></div>
+</div>
+</div>
+
+<footer>NAKILE DAILY © 2026 · Conçu pour l'Afrique 🌍</footer>
 </main>
-<footer>NAKILE DAILY © 2026<br>Conçu pour l'Afrique 🌍</footer>
+
 <nav>
-<button onclick="location.reload()">🏠<br>Accueil</button>
-<button onclick="openService('Finance','Espace finance en préparation.')">💰<br>Finance</button>
-<button onclick="openService('Études','Espace études en préparation.')">📚<br>Études</button>
-<button onclick="openService('Profil','Espace profil en préparation.')">👤<br>Profil</button>
+<button class="active" onclick="show('home',this)">🏠<br>Accueil</button>
+<button onclick="show('finance',this)">💰<br>Finance</button>
+<button onclick="show('school',this)">📚<br>Études</button>
+<button onclick="show('services',this)">🤝<br>Services</button>
+<button onclick="show('profile',this)">👤<br>Profil</button>
 </nav>
+
 <script>
-function openService(name,description){
-const r=document.getElementById('result');
-r.style.display='block';
-r.innerHTML='<h3>'+name+'</h3><p>'+description+'</p><button onclick="document.getElementById(\'result\').style.display=\'none\'">Retour</button>';
-r.scrollIntoView({behavior:'smooth'});
+const getData=(key,def)=>{try{return JSON.parse(localStorage.getItem(key))??def}catch(e){return def}};
+const putData=(key,val)=>localStorage.setItem(key,JSON.stringify(val));
+
+function show(id,btn){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+if(btn)btn.classList.add('active');
+window.scrollTo(0,0);
 }
-function searchServices(){
-const q=document.getElementById('search').value.toLowerCase();
-document.querySelectorAll('.card').forEach(c=>{
-c.style.display=c.innerText.toLowerCase().includes(q)?'block':'none';
-});
+function searchTiles(){
+let q=document.getElementById('search').value.toLowerCase();
+document.querySelectorAll('.tile').forEach(t=>t.style.display=t.innerText.toLowerCase().includes(q)?'block':'none');
+}
+
+// FINANCES
+let transactions=getData('nd_transactions',[]);
+function renderFinance(){
+let inc=transactions.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0);
+let exp=transactions.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);
+document.getElementById('income').textContent=inc.toLocaleString('fr-FR');
+document.getElementById('expense').textContent=exp.toLocaleString('fr-FR');
+document.getElementById('balance').textContent=(inc-exp).toLocaleString('fr-FR')+' FCFA';
+document.getElementById('history').innerHTML=transactions.length?transactions.map((t,i)=>'<div class="item">'+t.reason+' : <b>'+t.amount.toLocaleString('fr-FR')+' FCFA</b> <button class="danger" onclick="deleteTransaction('+i+')">Supprimer</button></div>').join(''):'Aucune opération.';
+}
+function addTransaction(){
+let amount=Number(document.getElementById('amount').value);
+let reason=document.getElementById('reason').value.trim();
+if(!Number.isFinite(amount)||amount<=0||!reason)return alert('Entre un montant et un motif valides.');
+transactions.push({amount,reason,type:document.getElementById('kind').value});
+putData('nd_transactions',transactions);
+document.getElementById('amount').value='';
+document.getElementById('reason').value='';
+renderFinance();
+}
+function deleteTransaction(i){
+transactions.splice(i,1);putData('nd_transactions',transactions);renderFinance();
+}
+function saveGoal(){
+let goal=Number(document.getElementById('goal').value);
+let saved=Number(document.getElementById('saved').value);
+if(goal<=0||saved<0)return alert('Vérifie les montants.');
+putData('nd_goal',{goal,saved});
+document.getElementById('goalResult').textContent=saved.toLocaleString('fr-FR')+' FCFA sur '+goal.toLocaleString('fr-FR')+' FCFA ('+Math.min(100,saved/goal*100).toFixed(1)+' %).';
+}
+let oldGoal=getData('nd_goal',null);
+if(oldGoal){document.getElementById('goal').value=oldGoal.goal;document.getElementById('saved').value=oldGoal.saved;document.getElementById('goalResult').textContent=oldGoal.saved.toLocaleString('fr-FR')+' FCFA sur '+oldGoal.goal.toLocaleString('fr-FR')+' FCFA.'}
+renderFinance();
+
+// CALCULATRICE
+function addCalc(v){document.getElementById('calc').value+=v}
+function calculate(){
+let v=document.getElementById('calc').value;
+if(!/^[0-9+\-*/().\s]+$/.test(v))return alert('Expression non valide.');
+try{
+let n=Function('"use strict";return ('+v+')')();
+if(!Number.isFinite(n))throw Error();
+document.getElementById('calcResult').textContent='Résultat : '+n;
+}catch(e){alert('Calcul impossible. Vérifie ton expression.')}
+}
+
+// CONVERSION
+function convertMoney(){
+let rates={XOF:1,EUR:655.957,USD:600};
+let amount=Number(document.getElementById('convertAmount').value);
+let from=document.getElementById('from').value;
+let to=document.getElementById('to').value;
+if(!Number.isFinite(amount)||amount<0)return alert('Entre un montant valide.');
+let result=amount*rates[from]/rates[to];
+document.getElementById('convertResult').textContent=result.toLocaleString('fr-FR',{maximumFractionDigits:2})+' '+to;
+}
+
+// ETUDES
+let grades=getData('nd_grades',[]);
+function renderGrades(){
+document.getElementById('gradesList').innerHTML=grades.map((g,i)=>'<div class="item">'+g.subject+' : '+g.grade+'/20 (coef. '+g.coef+') <button class="danger" onclick="deleteGrade('+i+')">Supprimer</button></div>').join('');
+let total=grades.reduce((a,g)=>a+g.grade*g.coef,0);
+let coef=grades.reduce((a,g)=>a+g.coef,0);
+document.getElementById('average').textContent=(coef? (total/coef).toFixed(2):'0')+'/20';
+}
+function addGrade(){
+let subject=document.getElementById('subject').value.trim();
+let grade=Number(document.getElementById('grade').value);
+let coef=Number(document.getElementById('coefficient').value);
+if(!subject||!Number.isFinite(grade)||grade<0||grade>20||!Number.isInteger(coef)||coef<1)return alert('Vérifie la matière, la note et le coefficient.');
+grades.push({subject,grade,coef});putData('nd_grades',grades);renderGrades();
+document.getElementById('subject').value='';document.getElementById('grade').value='';
+}
+function deleteGrade(i){grades.splice(i,1);putData('nd_grades',grades);renderGrades()}
+renderGrades();
+document.getElementById('studentNote').value=getData('nd_note','');
+function saveNote(){putData('nd_note',document.getElementById('studentNote').value);alert('Notes enregistrées sur cet appareil.')}
+
+// EMPLOI DU TEMPS
+let schedule=getData('nd_schedule',[]);
+function renderSchedule(){
+document.getElementById('scheduleList').innerHTML=schedule.length?schedule.map((s,i)=>'<div class="item"><b>'+s.day+' · '+s.hour+'</b><br>'+s.lesson+'<br><button class="danger" onclick="deleteSchedule('+i+')">Supprimer</button></div>').join(''):'Aucune activité enregistrée.';
+}
+function addSchedule(){
+let hour=document.getElementById('hour').value.trim();
+let lesson=document.getElementById('lesson').value.trim();
+if(!hour||!lesson)return alert('Complète l’heure et l’activité.');
+schedule.push({day:document.getElementById('day').value,hour,lesson});
+putData('nd_schedule',schedule);renderSchedule();
+document.getElementById('hour').value='';document.getElementById('lesson').value='';
+}
+function deleteSchedule(i){schedule.splice(i,1);putData('nd_schedule',schedule);renderSchedule()}
+renderSchedule();
+
+// ANNONCES LOCALES
+let ads=getData('nd_ads',[]);
+function renderAds(){
+document.getElementById('adsList').innerHTML=ads.length?ads.map((a,i)=>'<div class="item"><b>'+a.title+'</b><p>'+a.description+'</p><button class="danger" onclick="deleteAd('+i+')">Supprimer</button></div>').join(''):'Aucune annonce.';
+}
+function addAd(){
+let title=document.getElementById('adTitle').value.trim();
+let description=document.getElementById('adDescription').value.trim();
+if(!title||!description)return alert('Complète le titre et la description.');
+ads.push({title,description});putData('nd_ads',ads);renderAds();
+document.getElementById('adTitle').value='';document.getElementById('adDescription').value='';
+}
+function deleteAd(i){ads.splice(i,1);putData('nd_ads',ads);renderAds()}
+renderAds();
+
+// PROFIL
+let profile=getData('nd_profile',null);
+if(profile){document.getElementById('username').value=profile.name;document.getElementById('country').value=profile.country;document.getElementById('profileResult').textContent='Bienvenue '+profile.name+' · '+profile.country}
+function saveProfile(){
+let name=document.getElementById('username').value.trim();
+let country=document.getElementById('country').value;
+if(!name)return alert('Entre un prénom ou un pseudonyme.');
+putData('nd_profile',{name,country});
+document.getElementById('profileResult').textContent='Bienvenue '+name+' · '+country;
 }
 </script>
 </body>
