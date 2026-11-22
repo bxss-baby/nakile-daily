@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0756c9">
+<title>NAKILE DAILY</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f5fa;color:#172b4d}
+header{background:#0756c9;color:white;padding:25px 18px;border-radius:0 0 22px 22px}
+header h1{margin:0;font-size:27px}
+header p{margin-bottom:0}
+main{padding:18px}
+.search{width:100%;padding:14px;border:0;border-radius:12px;margin:12px 0 20px;font-size:15px}
+h2{font-size:19px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:white;padding:20px 10px;border-radius:15px;text-align:center;box-shadow:0 3px 12px #0000000c}
+.card span{font-size:29px}
+.card h3{font-size:15px;margin:9px 0 5px}
+.card p{font-size:12px;color:#68758a;margin:0}
+.notice{background:#e3efff;padding:16px;border-radius:14px;margin-top:20px}
+#result{background:white;padding:15px;border-radius:12px;margin-top:12px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:13px 4px;box-shadow:0 -2px 12px #0001}
+nav button{border:0;background:none;color:#0756c9;font-size:12px}
+footer{text-align:center;padding:65px 10px 80px;color:#68758a;font-size:12px}
+button{cursor:pointer}
+</style>
+</head>
+<body>
+<header>
+<h1>🌍 NAKILE DAILY</h1>
+<p>Une application. Plusieurs solutions. Chaque jour.</p>
+</header>
+<main>
+<input class="search" id="search" placeholder="🔎 Rechercher un service..." oninput="searchServices()">
+<h2>Bienvenue sur NAKILE DAILY 👋</h2>
+<p>Que souhaites-tu faire aujourd'hui ?</p>
+<div class="grid" id="services">
+<div class="card" onclick="openService('Finance','Suis tes dépenses et ton épargne.')"><span>💰</span><h3>Finance</h3><p>Gérer mon argent</p></div>
+<div class="card" onclick="openService('Études','Organise tes cours et tes révisions.')"><span>📚</span><h3>Études</h3><p>Apprendre chaque jour</p></div>
+<div class="card" onclick="openService('Calculatrice','Effectue tes calculs rapidement.')"><span>🧮</span><h3>Calculatrice</h3><p>Faire un calcul</p></div>
+<div class="card" onclick="openService('Actualités','Retrouve bientôt les informations du jour.')"><span>🌍</span><h3>Actualités</h3><p>Rester informé</p></div>
+<div class="card" onclick="openService('Services','Découvre les services et petites annonces.')"><span>🤝</span><h3>Services</h3><p>Trouver un service</p></div>
+<div class="card" onclick="openService('Mon profil','Tes préférences et ton espace personnel.')"><span>👤</span><h3>Mon profil</h3><p>Mon espace</p></div>
+</div>
+<div id="result" style="display:none"></div>
+<div class="notice">
+<strong>💡 Conseil du jour</strong>
+<p>Chaque petit pas compte. Organise ta journée et avance vers tes objectifs !</p>
+</div>
+</main>
+<footer>NAKILE DAILY © 2026<br>Conçu pour l'Afrique 🌍</footer>
+<nav>
+<button onclick="location.reload()">🏠<br>Accueil</button>
+<button onclick="openService('Finance','Espace finance en préparation.')">💰<br>Finance</button>
+<button onclick="openService('Études','Espace études en préparation.')">📚<br>Études</button>
+<button onclick="openService('Profil','Espace profil en préparation.')">👤<br>Profil</button>
+</nav>
+<script>
+function openService(name,description){
+const r=document.getElementById('result');
+r.style.display='block';
+r.innerHTML='<h3>'+name+'</h3><p>'+description+'</p><button onclick="document.getElementById(\'result\').style.display=\'none\'">Retour</button>';
+r.scrollIntoView({behavior:'smooth'});
+}
+function searchServices(){
+const q=document.getElementById('search').value.toLowerCase();
+document.querySelectorAll('.card').forEach(c=>{
+c.style.display=c.innerText.toLowerCase().includes(q)?'block':'none';
+});
+}
+</script>
+</body>
+  </html>
+  
